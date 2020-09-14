@@ -13,8 +13,8 @@ const db = knex({
   client: 'pg',
   connection: {
     host : '127.0.0.1',
-    user : 'abhilash.gj',
-    password : '',
+    user : 'postgres',
+    password : 'admin',
     database : 'ubsproject'
   }
 });
@@ -70,7 +70,7 @@ const frontRunningScenario1Inside1=async(data1, mainTime1)=>{
 		for (let i=0;i<data2.length;i++)
 		{
 			var resultInside2= await frontRunningScenario1Inside2(data1, data2, mainTime1)
-			resList.push(resultInside2)//creating a 2D array of trades involved in frontrunning 
+			resList.push(resultInside2)//creating a 2D array of trades involved in frontrunning
 		}
 	}
 	return resList;
@@ -89,7 +89,7 @@ const frontRunningScenario1Inside2=async(data1,data2,mainTime1)=>{
 				data3.splice(i,i)
 		}
 	}
-	//creating a 1D array of trades involved in front running 
+	//creating a 1D array of trades involved in front running
 	if(data3.length>0)
 	{
 		for(let i=0;i<data3.length;i++)
@@ -221,7 +221,7 @@ const frontRunningScenario3Inside1=async(data1,mainTime1)=>{
 	if(data2.length>0)
 	{
 		for(let i=0;i<data2.length;i++)
-		{	
+		{
 			resultInside2=await frontRunningScenario3Inside2(data1,data2[i],mainTime1,mainTime2);
 		}
 	}
