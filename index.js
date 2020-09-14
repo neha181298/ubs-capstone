@@ -60,8 +60,11 @@ const updatePrices=async()=>{
     var sec= await db.select('*').from('securities').where({security: data[i].security}).first();
     console.log(sec.price);
 		var result = await db.select('*').from('tradelist').where({ tradeid: data[i].tradeid }).update({ priceperunit: sec.price });
-    if(data[i].quantity>1000){
+    if(data[i].quantity>1000 && data[i].tradetype=='buy'){
       var result1 = await db.select('*').from('securities').where({security: data[i].security}).update({ price: Math.round(sec.price*1.1)});
+    }
+    if(data[i].quantity>1000 && data[i].tradetype=='sell'){
+      var result1 = await db.select('*').from('securities').where({security: data[i].security}).update({ price: Math.round(sec.price*0.9)});
     }
 	}
   return result;
