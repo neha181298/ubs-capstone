@@ -1,4 +1,5 @@
 //create table tradelist (firmclient varchar(30), Tradeid serial primary key, tradetype varchar(10), security varchar(30), quantity integer, priceperunit integer, brokername varchar(10));
+//create table securities (security varchar(30) primary key, price integer);
 //alter table tradelist add column timestamp varchar(20);
 //--sample queries to understand data being processed
 //insert into tradelist values ('firm', default, 'buy', 'Apple', '400', '10', 'B1', '3-03');
@@ -39,6 +40,40 @@ app.get('/getall', (req, res)=> {
 	})
 })
 
+//--------------------------------------------Update Prices--------------------------------------------------------------
+
+app.get('/updatePrices', (req, res)=> {
+  var result = updatePrices();
+	console.log("Updating prices");
+  res.send(result);
+})
+
+app.get('/resetPrices', (req, res)=> {
+  var result = resetPrices();
+	console.log("Resetting prices. Uber - 100, Facebook - 50, Apple - 250");
+  res.send(result);
+})
+
+const updatePrices=async()=>{
+	var data= await db.select('*').from('tradelist').orderBy('timestamp');
+	for(let i=0;i<data.length;i++){
+    var sec= await db.select('*').from('securities').where({security: data[i].security}).first();
+    console.log(sec.price);
+		var result = await db.select('*').from('tradelist').where({ tradeid: data[i].tradeid }).update({ priceperunit: sec.price });
+    if(data[i].quantity>1000){
+      var result1 = await db.select('*').from('securities').where({security: data[i].security}).update({ price: Math.round(sec.price*1.1)});
+    }
+	}
+  return result;
+}
+
+const resetPrices=async()=>{
+  var securities = [['Uber',100],['Facebook',50],['Apple',250]];
+  for (var i =0;i<securities.length;i++){
+    var result1 = await db.select('*').from('securities').where({security: securities[i][0]}).update({ price: securities[i][1]});
+  }
+  return
+}
 
 //--------------------------------------------Front running scenario 1--------------------------------------------------------------
 
