@@ -29,8 +29,21 @@ function calcTime(data){
 	return mainTime;
 }
 
+//--------------------------------------------General APIs--------------------------------------------------------------
+
+app.get('/getall', (req, res)=> {
+	db.select('*').from('tradelist')
+	.then(data=>{
+			console.log(data);
+			res.send(data);
+	})
+})
+
+
 //--------------------------------------------Front running scenario 1--------------------------------------------------------------
-app.get('/', async(req, res) => {
+
+
+app.get('/1', async(req, res) => {
 	var result=await frontRunningScenario1();
 	console.log("Front running scenario 1-",result)
 	res.send(result)
@@ -255,5 +268,5 @@ const frontRunningScenario3Inside2=async(data1,data2,mainTime1,mainTime2)=>{
 //----------------------------------------------------------------------------------------------------------------------------------
 
 app.listen(8000, () => {
-  console.log('Example app listening sssddon port 8000!')
+  console.log('Example app listening on port 8000!')
 });
