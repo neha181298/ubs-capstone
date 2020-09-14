@@ -117,7 +117,7 @@ const frontRunningScenario1Inside1=async(data1, mainTime1)=>{
 	{
 		for (let i=0;i<data2.length;i++)
 		{
-			var resultInside2= await frontRunningScenario1Inside2(data1, data2[i], mainTime1)
+			var resultInside2= await frontRunningScenario1Inside2(data1, data2, mainTime1)
 			resList.push(resultInside2)//creating a 2D array of trades involved in frontrunning
 		}
 	}
@@ -142,7 +142,7 @@ const frontRunningScenario1Inside2=async(data1,data2,mainTime1)=>{
 	{
 		for(let i=0;i<data3.length;i++)
 			resList.push(data3[i].tradeid)
-		resList.push(data2.tradeid)
+		resList.push(data2[0].tradeid)
 		resList.push(data1.tradeid)
 	}
 	return resList;
