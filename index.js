@@ -9,6 +9,8 @@ const express = require('express')
 const app = express();
 const knex = require('knex');
 const ArrayList=require('ArrayList');
+const csv = require('csv-parser');
+const fs = require('fs');
 
 const db = knex({
   client: 'pg',
@@ -40,6 +42,40 @@ app.get('/getall', (req, res)=> {
 	})
 })
 
+app.post('/insert', (req, res)=> {
+  db('tradelist').insert({
+    firmclient: req.body.firmclient,
+    security: req.body.security,
+    quantity: req.body.quantity,
+    priceperunit: req.body.priceperunit,
+    brokername: req.body.brokername,
+    timestamp: req.body.timestamp,
+    tradetype: req.body.tradetype
+  })
+  .then(response=>{
+  	console.log("Inserting new row");
+  	res.json(response);
+  })
+	.catch(err=>res.status(400).json('error getting data'))
+})
+
+app.get('/clear', (req, res)=> {
+	db.select('*').from('tradelist').del()
+	.then(data=>{
+			console.log('All rows cleared from tradelist');
+			res.send('All rows cleared from tradelist');
+	})
+  .catch(err=>res.status(400).json(err))
+})
+
+
+//--------------------------------------------Import Dummy Data--------------------------------------------------------------
+
+app.get('/import', (req, res)=>{
+  require('child_process').fork('csv-pg.js');
+  res.send('imported data from csv file')
+})
+
 //--------------------------------------------Update Prices--------------------------------------------------------------
 
 app.get('/updatePrices', (req, res)=> {
@@ -51,6 +87,7 @@ app.get('/updatePrices', (req, res)=> {
 app.get('/resetPrices', (req, res)=> {
   var result = resetPrices();
 	console.log("Resetting prices. Uber - 100, Facebook - 50, Apple - 250");
+  res.send("Resetting prices. Uber - 100, Facebook - 50, Apple - 250");
   res.send(result);
 })
 

@@ -15,7 +15,10 @@
   },
   "dependencies": {
     "arraylist": "^0.1.0",
+    "csv-parser": "^2.3.3",
     "express": "^4.17.1",
+    "fast-csv": "^4.3.2",
+    "fs": "0.0.1-security",
     "knex": "^0.21.5",
     "pg": "^8.3.3"
   }
