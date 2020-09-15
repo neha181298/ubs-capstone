@@ -25,10 +25,11 @@ const db = knex({
 
 
 function calcTime(data){
-	let timeString= data.split('-');
-	let minute=parseInt(timeString[1]);
+	let timeString= data.split(':');
 	let hour=parseInt(timeString[0]);
-	let mainTime=(hour*60)+minute;
+	let minute=parseInt(timeString[1]);
+	let sec=parseInt(timeString[2]);
+	let mainTime=(hour*60*60)+(minute*60)+sec;
 	return mainTime;
 }
 
@@ -173,7 +174,7 @@ const frontRunningScenario1Inside2=async(data1,data2,mainTime1)=>{
 		for(let i=0;i<data3.length;i++)
 		{
 			var mainTime3= await calcTime(data3[i].timestamp)
-			if((mainTime3-mainTime1)>10)
+			if((mainTime3-mainTime1)>900)
 				data3.splice(i,i)
 		}
 	}
@@ -235,7 +236,7 @@ const frontRunningScenario2Inside1=async(data1, mainTime1)=>{
 		for(let i=0;i<data2.length;i++)
 		{
 			var mainTime2=await calcTime(data2[i].timestamp);
-			if((mainTime1-mainTime2)>10)
+			if((mainTime1-mainTime2)>900)
 				data2.splice(i,i)
 		}
 	}
@@ -302,7 +303,7 @@ const frontRunningScenario3Inside1=async(data1,mainTime1)=>{
 		for(let i=0;i<data2.length;i++)
 		{
 			var mainTime2=await calcTime(data2[i].timestamp)
-			if((mainTime2-mainTime1)>10)
+			if((mainTime2-mainTime1)>900)
 				data2.splice(i,i)
 		}
 	}
@@ -325,7 +326,7 @@ const frontRunningScenario3Inside2=async(data1,data2,mainTime1,mainTime2)=>{
 		for(let i=0;i<data3.length;i++)
 		{
 			var mainTime3=await calcTime(data3[i].timestamp);
-			if((mainTime3-mainTime1)>10)
+			if((mainTime3-mainTime1)>900)
 				data3.splice(i,i)
 		}
 	}
